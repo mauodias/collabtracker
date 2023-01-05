@@ -1,23 +1,35 @@
+import os
+
 from fastapi import FastAPI, Form
+
+import connectors
 
 app = FastAPI()
 
+TOKEN = os.environ.get("GITLAB_TOKEN")
+
+
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"users": []}
 
-@app.get("/users")
+
+@app.get("/group")
 async def get_users():
     return {"users": []}
 
-@app.put("/users")
+
+@app.put("/group/add")
 async def add_user(user: str = Form()):
     return {"users": []}
 
-@app.delete("/users")
+
+@app.delete("/group/remove")
 async def delete_user(user: str):
     return {"users": []}
 
+
 @app.get("/me")
 async def get_logged_user():
-    return {"user": ""}
+    gitlab = connectors.Gitlab(TOKEN)
+    return {"user": gitlab.logged_user}
